@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneMgr.h"
 
 class DebugMgr;
 class Logger;
@@ -17,6 +18,7 @@ public:
 
 	unsigned long long FrameCount;
 
+	SceneMgr* SceneMgr;
 	DebugMgr* DebugMgr;
 	Logger* Logger;
 };

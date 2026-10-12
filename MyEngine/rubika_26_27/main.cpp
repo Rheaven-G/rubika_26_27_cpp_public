@@ -7,21 +7,59 @@
 #include <Logger.h>
 #include <DebugMgr.h>
 
+#include "SceneMgr.h"
+
 int main()
 {
     gData.Init();
 
-    sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "SFML works!", sf::State::Windowed);
+    sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "MyEngine", sf::State::Windowed);
 
     ImGui::SFML::Init(window);
-
+    
+    /* Test logs
     Logger::Info("This is an info message. That is useful");
     Logger::Warning("This is a warning message. Should I worry?");
     Logger::Error("This is an error message. Oh sh*t!!");
+    */
 
     sf::Clock clock;
     clock.restart();
-
+    
+    /**
+     * Scene init + entities
+     */
+    /* Previous testing, Threshold 1
+    SceneMgr sceneMgr;
+    sceneMgr.Init();
+    Scene* s1 = new Scene("DefaultScene1");
+    Scene* s2 = new Scene("DefaultScene2");
+    sceneMgr.AddUnique(s1);
+    sceneMgr.AddUnique(s2);
+    sceneMgr.SetActive(s1);
+    sceneMgr.SetActive("DefaultScene"); // Error testing
+    sceneMgr.SetActive("IncredibleScene"); // Error testing
+    Entity* e1 = new Entity("myEntity 1", sf::Vector2f(0.0f, 0.0f));
+    Entity* e2 = new Entity("myEntity 2", sf::Vector2f(0.0f, 0.0f));
+    Entity* e3 = new Entity("anotherOne", sf::Vector2f(0.0f, 0.0f));
+    e2->children.push_back(e3);
+    Entity* e4 = new Entity("anotherOne", sf::Vector2f(0.0f, 0.0f));
+    e2->children.push_back(e4);
+    Entity* e5 = new Entity("I lied", sf::Vector2f(0.0f, 0.0f));
+    e3->children.push_back(e5);
+    sceneMgr.GetActive()->AddUnique(e1);
+    sceneMgr.GetActive()->AddUnique(e2);
+    sceneMgr.GetActive()->Remove(e1);
+    sceneMgr.GetActive()->AddUnique(e1);
+    */
+    Scene* defaultScene = new Scene("Default Scene");
+    defaultScene->AddUnique(new Entity("The Lash tm", sf::Vector2f(0.0f, 0.0f)));
+    gData.SceneMgr->AddUnique(defaultScene);
+    
+    
+    /**
+     * Main while loop
+     */
     while (window.isOpen())
     {
         gData.IncrementFrameCount();
@@ -39,6 +77,7 @@ int main()
         {
             if (event->is<sf::Event::Closed>())
             {
+                
                 window.close();
             }
 
@@ -76,7 +115,9 @@ int main()
 
     ImGui::SFML::Shutdown();
 
+    // Shut
     gData.Shut();
+    // Destroy
     gData.Destroy();
 
     return 0;

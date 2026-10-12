@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include "IComponent.h"
+#include "TransformComponent.h"
 
 namespace sf
 {
@@ -9,10 +12,24 @@ namespace sf
 
 class Entity
 {
+	std::string m_uuid;
+	std::vector<IComponent*> m_components;
+	
+	
 public:
-	Entity(std::string friendlyName = "");
+	std::string friendlyName;
+	TransformComponent transform;
+	// TODO: Change parent/children to TransformComponent domain
+	Entity* parent = nullptr;
+	std::vector<Entity*> children;
+	
+	Entity(std::string name, sf::Vector2f position);
+	Entity& operator=(Entity const& other)=default;
+	bool operator==(Entity const& other) const;
 	virtual ~Entity();
-
+	
+	std::string getUUID();
+	
 	virtual void Start();
 	virtual void Update(float fDeltaTime);
 	virtual void Destroy();

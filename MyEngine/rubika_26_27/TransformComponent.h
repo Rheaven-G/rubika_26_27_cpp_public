@@ -1,8 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics/Transform.hpp>
+#include "IComponent.h"
 
-class TransformComponent
+class TransformComponent : public IComponent
 {
 public:
 	struct DecomposedData

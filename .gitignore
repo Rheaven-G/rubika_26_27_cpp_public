@@ -29,3 +29,6 @@ x64/
 *.vcxproj.user
 imgui.ini
 !packages/
+
+# Rider
+MyEngine/.idea/

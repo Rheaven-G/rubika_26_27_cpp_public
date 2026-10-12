@@ -9,10 +9,7 @@ TransformComponent::TransformComponent()
 
 	UpdateMatrix();
 }
-
-
-TransformComponent::~TransformComponent()
-{}
+TransformComponent::~TransformComponent() {}
 
 const sf::Transform& TransformComponent::GetMatrix() const
 {
@@ -63,14 +60,11 @@ sf::Vector2f TransformComponent::GetScale() const
 	return Scale;
 }
 
-void TransformComponent::Start()
-{}
+void TransformComponent::Start() {}
 
-void TransformComponent::Update(float fDeltaTime)
-{}
+void TransformComponent::Update(float fDeltaTime) {}
 
-void TransformComponent::Destroy()
-{}
+void TransformComponent::Destroy() {}
 
 void TransformComponent::UpdateMatrix()
 {

@@ -209,10 +209,16 @@
     <ClCompile Include="..\Dependencies\Imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="DebugMgr.cpp" />
+    <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneMgr.cpp" />
+    <ClCompile Include="TextureMgr.cpp" />
+    <ClCompile Include="Vector.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -232,13 +238,18 @@
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_iterators.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="IComponent.h" />
     <ClInclude Include="DebugMgr.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneMgr.h" />
+    <ClInclude Include="TextureMgr.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="utility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
