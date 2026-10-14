@@ -108,7 +108,8 @@ void SceneMgr::Remove(const Scene* p_scene)
         if (m_activeScene == p_scene)
         {
             m_activeScene->Destroy();
-            AddUnique(new Scene("Empty Scene"));
+            if (m_scenes.size() == 0)
+                AddUnique(new Scene("Empty Scene"));
             SetActive(m_scenes.back());
         }
     }
