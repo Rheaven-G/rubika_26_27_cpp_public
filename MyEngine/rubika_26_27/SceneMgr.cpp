@@ -80,7 +80,7 @@ size_t SceneMgr::GetActiveIndex()
     return 0;
 }
 
-void SceneMgr::AddUnique(Scene* p_scene)
+void SceneMgr::AddUnique(Scene* p_scene, bool switchToIt)
 {
     int n = 0;
     std::string name = p_scene->friendlyName;
@@ -95,7 +95,8 @@ void SceneMgr::AddUnique(Scene* p_scene)
     p_scene->friendlyName = name;
     
     m_scenes.push_back(p_scene);
-    if (m_activeScene == nullptr) SetActive(m_scenes.back());
+    if (m_activeScene == nullptr || switchToIt) 
+        SetActive(m_scenes.back());
 }
 void SceneMgr::Remove(const Scene* p_scene)
 {
@@ -154,7 +155,7 @@ void SceneMgr::DrawDebug()
     } 
     ImGui::SameLine(); if (ImGui::Button(" + ##SceneMgr"))
     {
-        AddUnique(new Scene("Empty Scene"));
+        AddUnique(new Scene("Empty Scene"), true);
     }
     
     if (ImGui::Button(" + ##Scene"))

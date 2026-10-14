@@ -27,7 +27,7 @@ public:
     Scene* GetActive() const;
     size_t GetActiveIndex();
     
-    void AddUnique(Scene* p_scene);
+    void AddUnique(Scene* p_scene, bool switchToIt = false);
     void Remove(const Scene* p_scene);
     
     // IDebugable
