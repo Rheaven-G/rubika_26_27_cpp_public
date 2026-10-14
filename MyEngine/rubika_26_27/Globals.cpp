@@ -8,6 +8,7 @@ Globals gData;
 Globals::Globals() : FrameCount(0)
 {
 	SceneMgr = new ::SceneMgr();
+	TextureMgr = new ::TextureMgr();
 	DebugMgr = new ::DebugMgr();
 	Logger = new ::Logger();
 }
@@ -20,12 +21,14 @@ Globals::~Globals()
 void Globals::Init()
 {
 	SceneMgr->Init();
+	TextureMgr->Init();
 	Logger->Init();
 }
 
 void Globals::Shut()
 {
 	SceneMgr->Shut();
+	TextureMgr->Shut();
 	Logger->Shut();
 }
 
@@ -33,6 +36,9 @@ void Globals::Destroy()
 {
 	delete SceneMgr;
 	SceneMgr = nullptr;
+	
+	delete TextureMgr;
+	TextureMgr = nullptr;
 	
 	delete DebugMgr;
 	DebugMgr = nullptr;

@@ -13,6 +13,9 @@ int main()
 {
     gData.Init();
 
+    gData.TextureMgr->LoadTexture(
+        "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/Antonio_Belpaese.png");
+    
     sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "MyEngine", sf::State::Windowed);
 
     ImGui::SFML::Init(window);
