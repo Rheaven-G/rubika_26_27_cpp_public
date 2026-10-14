@@ -30,10 +30,10 @@ public:
 	void Remove(const Entity* entity);
 	
 	
-	/*
-	 * This function will be removed later, when the rendering system will be more robust. But for now, we need it here.
-	 * Function that will be called each frame to draw the entity
-	*/
+	/** 
+	  * This function will be removed later, when the rendering system will be more robust. But for now, we need it here.
+	  * Function that will be called each frame to draw the entity
+	  */
 	void Draw(sf::RenderWindow& window) const;
 };
 bool IsNameUnique(const std::string& name, const std::vector<std::string>& names);
