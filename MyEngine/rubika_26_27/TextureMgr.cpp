@@ -131,18 +131,20 @@ void TextureMgr::DrawDebug()
         ImGui::TableSetupColumn("Size");
         ImGui::TableSetupColumn("Format");
         ImGui::TableHeadersRow();
-        ImGui::TableNextColumn();
         ImGui::TableNextRow();
+        ImGui::TableNextColumn();
             
         for (std::pair<const std::string, TextureData>& tex : m_mTextures)
         {
             // Name
+            //
+            //bool open = ImGui::TreeNode(tex.first.c_str());
             ImGui::TextUnformatted(tex.first.c_str());
             ImGui::TableNextColumn();
             // TexType
-            char* typeRepr = new char('B');
-            if (tex.second.type == TextureType::Animation) { *typeRepr = 'A';}
-            ImGui::TextUnformatted(typeRepr);
+            char typeRepr[1] {'B'}; // TODO: Fix this weird bug where typeRepr is shown as  'B?????'
+            if (tex.second.type == TextureType::Animation) { typeRepr[0] = 'A';}
+            ImGui::TextUnformatted(typeRepr );
             ImGui::TableNextColumn();
             // Dimensions
             sf::Vector2u tDim = tex.second.Texture.getSize();
@@ -153,8 +155,47 @@ void TextureMgr::DrawDebug()
             ImGui::TableNextColumn();
             // Format
             ImGui::TextUnformatted(tex.second.Texture.isSrgb() ? "sRGB" : "non-sRGB");
+            
+            // TODO: Rework texture table/tree view
+            /* attempt at making a good foldable table ui
+            if (open)
+            {
+                if (tex.second.type == TextureType::Animation)
+                {
+                    ImGui::TreeNodeEx("test");
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(typeRepr);  
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(tex.second.dAnimation.IsBackward ? "Backward" : "Forward");
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(std::format(
+                        "{}x{}", 
+                        tex.second.dAnimation.OffsetX, 
+                        tex.second.dAnimation.OffsetY)
+                        .c_str());
+                    ImGui::TreePop();
+                } 
+                else // TextureType::Background
+                {
+                    ImGui::TreeNodeEx("test");
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(typeRepr);  
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(tex.second.dAnimation.IsBackward ? "Backward" : "Forward");
+                    ImGui::TableNextColumn();
+                    ImGui::TextUnformatted(std::format(
+                        "{}x{}", 
+                        tex.second.dAnimation.OffsetX, 
+                        tex.second.dAnimation.OffsetY)
+                        .c_str());
+                    ImGui::TreePop();
+                }
+                ImGui::TreePop();
+            }
+            */
             ImGui::TableNextColumn();
             ImGui::TableNextRow();
+
         }
         
         // ---- Ends table
