@@ -148,7 +148,7 @@ void TextureMgr::DrawDebug()
         ImGuiTreeNodeFlags_DefaultOpen | 
         ImGuiTreeNodeFlags_DrawLinesFull;
     
-    /* Old
+    /* Old but works*/
     if (ImGui::BeginTable("TextureData table", 5, table_flags))
     {
         ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
@@ -191,7 +191,9 @@ void TextureMgr::DrawDebug()
         // ---- Ends table
         ImGui::EndTable();
     }
-    */
+    /**/
+    
+    /* TODO: Better previsualisation, WIP, but have to advance on other stuff ;-;
     
     bool previewImages = ImGui::Button("Preview All");
     struct ListElement
@@ -256,6 +258,7 @@ void TextureMgr::DrawDebug()
         };
         elements.push_back(ListElement{});
     }
+    */
 }
 
 bool ParseStaticTileMetadata(TextureData& dTex, rapidxml::xml_node<>* node)
