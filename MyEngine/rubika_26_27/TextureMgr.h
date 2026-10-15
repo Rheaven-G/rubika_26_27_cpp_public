@@ -7,22 +7,7 @@
 #include <string>
 
 #include "DebugMgr.h"
-
-struct AnimationData
-{
-	int StartX = 0;
-	int StartY = 0;
-	int SizeX = 0;
-	int SizeY = 0;
-	int OffsetX = 0;
-	int OffsetY = 0;
-	int AnimationSpriteCount = 0;
-	int SpriteOnLine = 0;
-	bool IsRevertedX = false;
-	bool IsRevertedY = false;
-	bool IsBackward  = false;
-	float TimeBetweenAnimationInS = 0.f;
-};
+#include "rapidxml/rapidxml.hpp"
 
 struct StaticTileData
 {
@@ -30,8 +15,15 @@ struct StaticTileData
 	int StartY = 0;
 	int SizeX = 0;
 	int SizeY = 0;
-	bool IsRevertedX = false;
-	bool IsRevertedY = false;
+	bool IsReverted = false;
+};
+struct AnimationData : public StaticTileData
+{
+	int OffsetX = 0;
+	int OffsetY = 0;
+	int AnimationSpriteCount = 0;
+	int SpriteOnLine = 0;
+	float TimeBetweenAnimationInS = 0.f;
 };
 
 enum TextureType
@@ -43,18 +35,14 @@ struct TextureData
 {
 public:
 	TextureData();
-	TextureData(std::string name, std::filesystem::path texPath, sf::Texture texture, TextureType type = 
-	TextureType::Background);
 	~TextureData();
 	
 	std::string name;
-	TextureType type;
 	std::filesystem::path texPath;
-	AnimationData dAnimation;
-	StaticTileData dStaticTile;
 	sf::Texture Texture;
-	// Container of AnimationData AnimationsData;
-	// Container of StaticTileData StaticTilesData;
+	std::unordered_map<std::string,  AnimationData> dAnimation;
+	std::unordered_map<std::string, StaticTileData> dStaticTile;
+	TextureType type;
 
 	// friend class TextureMgr; // Forgotten change, before had private stuff and was a class
 };
@@ -89,3 +77,5 @@ public:
 	// ---- IDebugable
 	void DrawDebug();
 };
+static bool ParseStaticTileMetadata(TextureData& dTex, rapidxml::xml_node<>* node);
+static bool ParseAnimationMetadata (TextureData& dTex, rapidxml::xml_node<>* node);

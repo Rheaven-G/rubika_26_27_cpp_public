@@ -1,15 +1,13 @@
 ﻿#include "TextureMgr.h"
 #include <rapidxml/rapidxml.hpp>
 #include <rapidxml/rapidxml_utils.hpp>
-
+#include <Imgui/imgui-SFML.h>
 #include "Globals.h"
 #include "Logger.h"
 
 // ---- TextureData
 TextureData::TextureData() 
     :name("NULL"), type(TextureType::Background), texPath("NULL"), Texture(sf::Texture()) {}
-TextureData::TextureData(std::string name, std::filesystem::path texPath, sf::Texture texture, TextureType type) 
-    : name(name), type(type), texPath(texPath), Texture(texture) {}
 TextureData::~TextureData() {}
 const TextureData& TextureMgr::GetTextureData(const std::string& name) const
 {
@@ -76,10 +74,35 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
     // ---- Check metadata validity + LOA
     rapidxml::file<> mTex/* = rapidxml::file<>*/(xmlPath.c_str());
     rapidxml::xml_document<> xTex;
+    
+    // ---- XML is correctly formatted
     try { xTex.parse<0>(mTex.data()); } 
-    catch (const char* msg) { Logger::Error(
+    catch (const char* msg) { 
+        Logger::Error(
             std::format(
-                "TextureMgr::LoadTexture -> XML is broken or corrupted. rapidxml error '{}'.", msg)); }
+                "TextureMgr::LoadTexture -> XML is broken or corrupted. rapidxml error '{}'.", msg)); 
+        return false;
+    }
+    
+    // ---- Metadata loading
+    TextureData dTex = TextureData();
+    const char* firstNodeType = xTex.document()->first_node()->name();
+    if (strcmp(firstNodeType, "Animations") == 0)
+    {
+        ParseAnimationMetadata(dTex, xTex.document()->first_node()->first_node()); // We pass the first animation
+    }
+    else if (strcmp(firstNodeType, "Background") == 0)
+    {
+        ParseStaticTileMetadata(dTex, xTex.document()->first_node()->first_node()); // We pass the first animation
+    }
+    else // Unrecognised node.
+    {
+        Logger::Error(
+            std::format(
+                "TextureMgr::LoadTexture -- TextureType not recognised. Can treat <Animation> or <Background> types."));
+        return false;
+    } // Unrecognised node.
+    
     
     // ---- Check image validity + LOAD
     sf::Texture tTex = sf::Texture();
@@ -89,6 +112,7 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
             std::format(
                 "TextureMgr::LoadTexture -> Failed to load image texture from '{}'. Are you sure it's an image ?",
                 path.string()));
+        return false;
     }
     /* 
      * END FAILPROOF 
@@ -101,10 +125,11 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
     std::string nTex = xmlPath
         .replace(0, xmlPath.find_last_of('/')+1, "")    //remove everything before name of file
         .replace(xmlPath.length()-4, 4, "");                //remove file extension
-    
-    // ---- Creation of actual TextureData
-    TextureData dTex = TextureData(nTex, path, tTex);
-    // ---- Adding it to the hashmap of TextureData
+    // ---- Assignation of actual TextureData
+    dTex.Texture = tTex;
+    dTex.name = nTex;
+    dTex.texPath = path;
+    // ---- Adding it to the hashmap of TextureData in TextureMgr
     m_mTextures[nTex] = dTex;
     // ---- If we are there, we succeeded !!
     return true;
@@ -123,6 +148,7 @@ void TextureMgr::DrawDebug()
         ImGuiTreeNodeFlags_DefaultOpen | 
         ImGuiTreeNodeFlags_DrawLinesFull;
     
+    /* Old
     if (ImGui::BeginTable("TextureData table", 5, table_flags))
     {
         ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
@@ -142,7 +168,7 @@ void TextureMgr::DrawDebug()
             ImGui::TextUnformatted(tex.first.c_str());
             ImGui::TableNextColumn();
             // TexType
-            char typeRepr[1] {'B'}; // TODO: Fix this weird bug where typeRepr is shown as  'B?????'
+            char typeRepr[2] {'B', '\0'}; // TODO: Fix this weird bug where typeRepr is shown as  'B?????'
             if (tex.second.type == TextureType::Animation) { typeRepr[0] = 'A';}
             ImGui::TextUnformatted(typeRepr );
             ImGui::TableNextColumn();
@@ -155,45 +181,9 @@ void TextureMgr::DrawDebug()
             ImGui::TableNextColumn();
             // Format
             ImGui::TextUnformatted(tex.second.Texture.isSrgb() ? "sRGB" : "non-sRGB");
+            // ImGui::Image();
             
-            // TODO: Rework texture table/tree view
-            /* attempt at making a good foldable table ui
-            if (open)
-            {
-                if (tex.second.type == TextureType::Animation)
-                {
-                    ImGui::TreeNodeEx("test");
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(typeRepr);  
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(tex.second.dAnimation.IsBackward ? "Backward" : "Forward");
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(std::format(
-                        "{}x{}", 
-                        tex.second.dAnimation.OffsetX, 
-                        tex.second.dAnimation.OffsetY)
-                        .c_str());
-                    ImGui::TreePop();
-                } 
-                else // TextureType::Background
-                {
-                    ImGui::TreeNodeEx("test");
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(typeRepr);  
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(tex.second.dAnimation.IsBackward ? "Backward" : "Forward");
-                    ImGui::TableNextColumn();
-                    ImGui::TextUnformatted(std::format(
-                        "{}x{}", 
-                        tex.second.dAnimation.OffsetX, 
-                        tex.second.dAnimation.OffsetY)
-                        .c_str());
-                    ImGui::TreePop();
-                }
-                ImGui::TreePop();
-            }
-            */
-            ImGui::TableNextColumn();
+            ImGui::TableNextColumn(); 
             ImGui::TableNextRow();
 
         }
@@ -201,4 +191,183 @@ void TextureMgr::DrawDebug()
         // ---- Ends table
         ImGui::EndTable();
     }
+    */
+    
+    bool previewImages = ImGui::Button("Preview All");
+    struct ListElement
+    {
+        const char*         Type;
+        const char*         Name;
+        const sf::Texture&  Texture;
+        const char*         Dimensions;
+        
+        const std::unordered_map<std::string, AnimationData>& AnimationData;
+        
+        void Preview()
+        {
+            ImGui::TextUnformatted(Name);
+            ImGui::Image(*Texture);
+            ImGui::SameLine();  
+              ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2);
+            // Type line
+            ImGui::TableNextRow();
+            ImGui::TextUnformatted("Type");
+            ImGui::TableNextColumn();
+            ImGui::TextUnformatted(Type);
+            // Dimensions line
+            ImGui::TableNextRow();
+            ImGui::TextUnformatted("Dimensions");
+            ImGui::TableNextColumn();
+            ImGui::TextUnformatted(Dimensions);
+        }
+        void NoPreview()
+        {
+            if (ImGui::TreeNodeEx(Name))
+            {
+                ImGui::Image(*Texture);
+                ImGui::SameLine();  
+                ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2);
+                // Type line
+                ImGui::TableNextRow();
+                ImGui::TextUnformatted("Type");
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(Type);
+                // Dimensions line
+                ImGui::TableNextRow();
+                ImGui::TextUnformatted("Dimensions");
+                ImGui::TableNextColumn();
+                ImGui::TextUnformatted(Dimensions);
+                
+                ImGui::TreePop();
+            }
+        }
+    };
+    std::vector<ListElement> elements;
+    elements.reserve(m_mTextures.size());
+    for (std::unordered_map<std::string, TextureData>::iterator it : m_mTextures.begin())
+    {
+        TextureData td = it->second;
+        ListElement le {
+            td.type == TextureType::Animation ? "A\0" : "B\0",
+            td.name.c_str(),
+            td.Texture,
+            std::format("{}x{}", td.Texture.getSize().x, td.Texture.getSize().y).c_str(),
+            td.dAnimation,
+        };
+        elements.push_back(ListElement{});
+    }
+}
+
+bool ParseStaticTileMetadata(TextureData& dTex, rapidxml::xml_node<>* node)
+{
+    return true;
+}
+bool ParseAnimationMetadata (TextureData& dTex, rapidxml::xml_node<>* node)
+{
+    rapidxml::xml_node<>* current = node;
+    do
+    {
+        // ---- Checks
+        if (strcmp(current->name(), "Animation") != 0)
+        {
+            Logger::Error(
+                std::format(
+                    "ParseAnimationMetadata -- Wrong node format for 'Animations' texture type."));
+            return false;
+        }
+        
+        rapidxml::xml_attribute<>* att = current->first_attribute();
+        if (att != nullptr)
+        {   
+            if (strcmp(att->name(), "Name") != 0)
+            {
+                Logger::Error(std::format(
+            "ParseAnimationMetadata -- Wrong node attribute name. Looking for 'Name' and found {}", 
+                    att->name()));
+                return false;
+            }   
+            // Then we are lowkey good
+            
+            AnimationData dAnimation{};
+            Logger::Info(std::format(
+                "first_attribute() is not nullptr and is named '{}', with value '{}'", 
+                current->first_attribute()->name(),
+                current->first_attribute()->value()));
+            
+            const char* sProps[] {
+                // ---- StaticTile Shared
+                "X",                    // StartX
+                "Y",                    // StartY
+                "SizeX",                // SizeX
+                "SizeY",                // SizeY
+                "Reverted",             // IsReverted
+                // ---- Animation Specific
+                "OffsetX",              // OffsetX
+                "OffsetY",              // OffsetY
+                "SpriteNum",            // AnimationSpriteCount
+                "SpriteOnLine",         // SpriteOnLine
+                "TimeBetweenAnimation", // TimeBetweenAnimationInS
+            };
+            // TODO: Investigate how to do it with map and bind char[] from xml to var in struct dAnimation 
+            // const std::unordered_map<const char[], void*> properties;
+            // properties["X"] = &dAnimation.StartX;
+            
+            rapidxml::xml_node<>* property = current->first_node();
+            // ---- StaticTile Shared
+            // int  StartX
+            if (strcmp(property->name(), sProps[0]) == 0) 
+                dAnimation.StartX = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int  StartY
+            if (strcmp(property->name(), sProps[1]) == 0)
+                dAnimation.StartY = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int  SizeX
+            if (strcmp(property->name(), sProps[2]) == 0)
+                dAnimation.SizeX = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int  SizeY
+            if (strcmp(property->name(), sProps[3]) == 0)
+                dAnimation.SizeY = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // bool IsReverted
+            if (strcmp(property->name(), sProps[4]) == 0)
+                dAnimation.IsReverted = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // ---- Animation Specific
+            // int   OffsetX
+            if (strcmp(property->name(), sProps[5]) == 0)
+                dAnimation.OffsetX = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int   OffsetY
+            if (strcmp(property->name(), sProps[6]) == 0)
+                dAnimation.OffsetY = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int   AnimationSpriteCount
+            if (strcmp(property->name(), sProps[7]) == 0)
+                dAnimation.AnimationSpriteCount = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // int   SpriteOnLine
+            if (strcmp(property->name(), sProps[8]) == 0)
+                dAnimation.SpriteOnLine = std::stoi(property->value());
+            property = property->next_sibling();
+            
+            // float TimeBetweenAnimationInS
+            if (strcmp(property->name(), sProps[9]) == 0)
+                dAnimation.TimeBetweenAnimationInS = std::stof(property->value());
+            
+            dTex.dAnimation[att->value()] = dAnimation;
+        }
+        
+        current = current->next_sibling();
+    } while ( current != nullptr );
+    return true;   
 }
