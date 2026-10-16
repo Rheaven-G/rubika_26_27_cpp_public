@@ -13,8 +13,9 @@ public:
 		sf::Vector2f Scale;
 	};
 
-	TransformComponent();
-	~TransformComponent();
+	TransformComponent()=delete;
+	TransformComponent(Entity& entity);
+	~TransformComponent() override;
 
 
 	const sf::Transform& GetMatrix() const;
@@ -31,9 +32,9 @@ public:
 	void SetScale(sf::Vector2f newScale);
 	sf::Vector2f GetScale() const;
 
-	void Start();
-	void Update(float fDeltaTime);
-	void Destroy();
+	void Start() override;
+	void Update(float fDeltaTime) override;
+	void Destroy() override;
 
 private:
 	sf::Transform Matrix;

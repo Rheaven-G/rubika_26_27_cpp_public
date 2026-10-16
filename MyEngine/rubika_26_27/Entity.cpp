@@ -7,7 +7,7 @@
 #include "utility.h"
 #include "TransformComponent.h"
 
-Entity::Entity(std::string name, sf::Vector2f position)
+Entity::Entity(std::string name, sf::Vector2f position) : transform(TransformComponent(*this))
 {
     //m_uuid = uuid::generated_uuid_v4();
     friendlyName = name;

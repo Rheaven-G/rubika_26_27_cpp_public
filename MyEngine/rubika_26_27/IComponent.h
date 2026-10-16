@@ -1,7 +1,26 @@
-﻿#pragma once
+#pragma once
 
-class IComponent
+#include <string>
+
+class Entity;
+
+class IComponent abstract
 {
 public:
-    virtual void Update(float fDeltaTime) = 0;
+	IComponent() = delete;
+	IComponent(Entity& entity) : ParentEntity(entity) {}
+
+	virtual ~IComponent()=default;
+
+	virtual void Start() = 0;
+
+	virtual void Update(float fDeltaTime) = 0;
+
+	virtual void Destroy() = 0;
+
+protected:
+	Entity& GetEntity() const { return ParentEntity; };
+
+private:
+	Entity& ParentEntity;
 };
