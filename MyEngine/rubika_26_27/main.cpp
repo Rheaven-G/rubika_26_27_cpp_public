@@ -15,6 +15,13 @@ int main()
 
     gData.TextureMgr->LoadTexture(
         "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/Antonio_Belpaese.png");
+    gData.TextureMgr->LoadTexture(
+        "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/IsaacSprite.png");
+    gData.TextureMgr->LoadTexture(
+        "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/unexistent.png");
+    auto& texIsaac = gData.TextureMgr->GetTextureData("IsaacSprite");
+    
+    auto& texUnexistent = gData.TextureMgr->GetTextureData("blabla");
     
     sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "MyEngine", sf::State::Windowed);
 

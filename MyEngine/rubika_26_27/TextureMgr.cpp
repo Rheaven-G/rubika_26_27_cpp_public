@@ -1,7 +1,11 @@
 ﻿#include "TextureMgr.h"
+
+#include <iostream>
 #include <rapidxml/rapidxml.hpp>
 #include <rapidxml/rapidxml_utils.hpp>
 #include <Imgui/imgui-SFML.h>
+#include <SFML/Graphics/RenderTexture.hpp>
+
 #include "Globals.h"
 #include "Logger.h"
 
@@ -20,7 +24,7 @@ const TextureData& TextureMgr::GetTextureData(const std::string& name) const
     }
     Logger::Error(
         std::format(
-            "TextureMgr::GetTextureData -> No texture with name '{}' found. Does it exists ?", name));
+            "TextureMgr::GetTextureData -> No texture with name '{}' found. Does it exists ? Returning blank TextureData.", name));
     return TextureData();
 }
 
@@ -106,7 +110,7 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
     
     // ---- Check image validity + LOAD
     sf::Texture tTex = sf::Texture();
-    if (!tTex.loadFromFile(path, true))
+    if (!tTex.loadFromFile(path))
     {
         Logger::Error(
             std::format(
@@ -143,122 +147,95 @@ void TextureMgr::DrawDebug()
         ImGuiTableFlags_Resizable | 
         ImGuiTableFlags_RowBg | 
         ImGuiTableFlags_NoBordersInBody;
-    static ImGuiTreeNodeFlags tree_node_flags = 
-        ImGuiTreeNodeFlags_SpanAllColumns | 
-        ImGuiTreeNodeFlags_DefaultOpen | 
-        ImGuiTreeNodeFlags_DrawLinesFull;
     
-    /* Old but works*/
-    if (ImGui::BeginTable("TextureData table", 5, table_flags))
-    {
-        ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
-        ImGui::TableSetupColumn("Type");
-        ImGui::TableSetupColumn("Dimensions");
-        ImGui::TableSetupColumn("Size");
-        ImGui::TableSetupColumn("Format");
-        ImGui::TableHeadersRow();
-        ImGui::TableNextRow();
-        ImGui::TableNextColumn();
-            
-        for (std::pair<const std::string, TextureData>& tex : m_mTextures)
-        {
-            // Name
-            //
-            //bool open = ImGui::TreeNode(tex.first.c_str());
-            ImGui::TextUnformatted(tex.first.c_str());
-            ImGui::TableNextColumn();
-            // TexType
-            char typeRepr[2] {'B', '\0'}; // TODO: Fix this weird bug where typeRepr is shown as  'B?????'
-            if (tex.second.type == TextureType::Animation) { typeRepr[0] = 'A';}
-            ImGui::TextUnformatted(typeRepr );
-            ImGui::TableNextColumn();
-            // Dimensions
-            sf::Vector2u tDim = tex.second.Texture.getSize();
-            ImGui::TextUnformatted(std::format("{}x{}", tDim.x, tDim.y).c_str());
-            ImGui::TableNextColumn();
-            // Size
-            ImGui::TextUnformatted(std::format("{} pixels", tDim.x * tDim.y).c_str());
-            ImGui::TableNextColumn();
-            // Format
-            ImGui::TextUnformatted(tex.second.Texture.isSrgb() ? "sRGB" : "non-sRGB");
-            // ImGui::Image();
-            
-            ImGui::TableNextColumn(); 
-            ImGui::TableNextRow();
-
-        }
-        
-        // ---- Ends table
-        ImGui::EndTable();
-    }
-    /**/
+    static bool unfoldAll { true };
+    ImGui::Checkbox("Unfold All", &unfoldAll);
     
-    /* TODO: Better previsualisation, WIP, but have to advance on other stuff ;-;
-    
-    bool previewImages = ImGui::Button("Preview All");
+    // ---- Drawable Struct
     struct ListElement
     {
-        const char*         Type;
-        const char*         Name;
-        const sf::Texture&  Texture;
-        const char*         Dimensions;
+        const std::string Type;
+        const std::string& Name;
+        const sf::Texture* Texture;
+        const sf::Vector2f Dimensions;
         
         const std::unordered_map<std::string, AnimationData>& AnimationData;
-        
-        void Preview()
+    
+        void Preview() const
         {
-            ImGui::TextUnformatted(Name);
-            ImGui::Image(*Texture);
+            ImGui::SeparatorText(Name.c_str());
+            ImGui::Image(*Texture, Dimensions);
             ImGui::SameLine();  
-              ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2);
+              ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2, table_flags);
+              ImGui::TableSetupColumn("Data");
+              ImGui::TableSetupColumn("Value");
             // Type line
             ImGui::TableNextRow();
+            ImGui::TableNextColumn();
             ImGui::TextUnformatted("Type");
             ImGui::TableNextColumn();
-            ImGui::TextUnformatted(Type);
+            ImGui::TextUnformatted(Type.c_str());
             // Dimensions line
             ImGui::TableNextRow();
+            ImGui::TableNextColumn();
             ImGui::TextUnformatted("Dimensions");
             ImGui::TableNextColumn();
-            ImGui::TextUnformatted(Dimensions);
+            ImGui::TextUnformatted(std::format("{}x{}", Dimensions.x, Dimensions.y).c_str());
+            
+            ImGui::EndTable();
         }
-        void NoPreview()
+        void NoPreview() const
         {
-            if (ImGui::TreeNodeEx(Name))
+            if (ImGui::TreeNodeEx(Name.c_str()))
             {
-                ImGui::Image(*Texture);
+                ImGui::Image(*Texture, Dimensions);
                 ImGui::SameLine();  
-                ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2);
+                  ImGui::BeginTable(std::format("Properties##{}", Name).c_str(), 2, table_flags);
+                  ImGui::TableSetupColumn("Data");
+                  ImGui::TableSetupColumn("Value");
                 // Type line
                 ImGui::TableNextRow();
+                ImGui::TableNextColumn();
                 ImGui::TextUnformatted("Type");
                 ImGui::TableNextColumn();
-                ImGui::TextUnformatted(Type);
+                ImGui::TextUnformatted(Type.c_str());
                 // Dimensions line
                 ImGui::TableNextRow();
+                ImGui::TableNextColumn();
                 ImGui::TextUnformatted("Dimensions");
                 ImGui::TableNextColumn();
-                ImGui::TextUnformatted(Dimensions);
+                ImGui::TextUnformatted(std::format("{}x{}", Dimensions.x, Dimensions.y).c_str());
                 
+                ImGui::EndTable();
                 ImGui::TreePop();
             }
         }
     };
+    
     std::vector<ListElement> elements;
     elements.reserve(m_mTextures.size());
-    for (std::unordered_map<std::string, TextureData>::iterator it : m_mTextures.begin())
+    for (const auto& it : m_mTextures)
     {
-        TextureData td = it->second;
+        const TextureData& td = it.second;
         ListElement le {
-            td.type == TextureType::Animation ? "A\0" : "B\0",
-            td.name.c_str(),
-            td.Texture,
-            std::format("{}x{}", td.Texture.getSize().x, td.Texture.getSize().y).c_str(),
+            td.type == TextureType::Animation ? "A" : "B",
+            it.first,
+            &td.Texture,
+            {(float)td.Texture.getSize().x, (float)td.Texture.getSize().y},
             td.dAnimation,
         };
-        elements.push_back(ListElement{});
+        elements.push_back(le);
     }
-    */
+    for (const auto& ele : elements)
+    {
+        if (unfoldAll)
+        {
+            ele.Preview();
+        } else
+        {
+            ele.NoPreview();
+        }
+    }
 }
 
 bool ParseStaticTileMetadata(TextureData& dTex, rapidxml::xml_node<>* node)
@@ -318,55 +295,88 @@ bool ParseAnimationMetadata (TextureData& dTex, rapidxml::xml_node<>* node)
             rapidxml::xml_node<>* property = current->first_node();
             // ---- StaticTile Shared
             // int  StartX
-            if (strcmp(property->name(), sProps[0]) == 0) 
-                dAnimation.StartX = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[0]) == 0) 
+                {dAnimation.StartX = std::stoi(property->value());}
+            } else { dAnimation.StartX = 0;}
             property = property->next_sibling();
             
             // int  StartY
-            if (strcmp(property->name(), sProps[1]) == 0)
-                dAnimation.StartY = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[1]) == 0)
+                { dAnimation.StartY = std::stoi(property->value());}
+            } else { dAnimation.StartY = 0;}
             property = property->next_sibling();
             
             // int  SizeX
-            if (strcmp(property->name(), sProps[2]) == 0)
-                dAnimation.SizeX = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[2]) == 0)
+                { dAnimation.SizeX = std::stoi(property->value());}
+            }else { dAnimation.SizeX = 0;}
             property = property->next_sibling();
             
             // int  SizeY
-            if (strcmp(property->name(), sProps[3]) == 0)
-                dAnimation.SizeY = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[3]) == 0)
+                { dAnimation.SizeY = std::stoi(property->value());; }
+            } else { dAnimation.SizeY = 0;}
             property = property->next_sibling();
             
             // bool IsReverted
-            if (strcmp(property->name(), sProps[4]) == 0)
-                dAnimation.IsReverted = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[4]) == 0)
+                { dAnimation.IsReverted = std::stoi(property->value());}
+            } else { dAnimation.IsReverted = 0;}
             property = property->next_sibling();
             
             // ---- Animation Specific
             // int   OffsetX
-            if (strcmp(property->name(), sProps[5]) == 0)
-                dAnimation.OffsetX = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[5]) == 0)
+                { dAnimation.OffsetX = std::stoi(property->value());}
+            } else { dAnimation.OffsetX = 0;}
             property = property->next_sibling();
             
             // int   OffsetY
-            if (strcmp(property->name(), sProps[6]) == 0)
-                dAnimation.OffsetY = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[6]) == 0)
+                { dAnimation.OffsetY = std::stoi(property->value());}
+            } else { dAnimation.OffsetY = 0;}
             property = property->next_sibling();
             
             // int   AnimationSpriteCount
-            if (strcmp(property->name(), sProps[7]) == 0)
-                dAnimation.AnimationSpriteCount = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[7]) == 0)
+                { dAnimation.AnimationSpriteCount = std::stoi(property->value());}
+            } else { dAnimation.AnimationSpriteCount = 0;}
             property = property->next_sibling();
             
             // int   SpriteOnLine
-            if (strcmp(property->name(), sProps[8]) == 0)
-                dAnimation.SpriteOnLine = std::stoi(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[8]) == 0)
+                { dAnimation.SpriteOnLine = std::stoi(property->value());}
+            } else { dAnimation.SpriteOnLine = 0;}
             property = property->next_sibling();
             
             // float TimeBetweenAnimationInS
-            if (strcmp(property->name(), sProps[9]) == 0)
-                dAnimation.TimeBetweenAnimationInS = std::stof(property->value());
+            if (property != nullptr)
+            {
+                if (strcmp(property->name(), sProps[9]) == 0)
+                { dAnimation.TimeBetweenAnimationInS = std::stof(property->value()); }
+            } 
+            else
+            { dAnimation.TimeBetweenAnimationInS = 0;}
             
+            // ---- Add everything to AnimationData
             dTex.dAnimation[att->value()] = dAnimation;
         }
         
