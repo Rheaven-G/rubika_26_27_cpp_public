@@ -214,6 +214,7 @@
     <ClCompile Include="IDrawable.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneMgr.cpp" />
     <ClCompile Include="TextureMgr.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="IDrawable.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="Profiler.h" />
+    <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneMgr.h" />
     <ClInclude Include="TextureMgr.h" />

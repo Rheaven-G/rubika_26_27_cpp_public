@@ -122,9 +122,6 @@ bool TextureMgr::LoadTexture(const std::filesystem::path& path)
      * END FAILPROOF 
      */
     
-    
-    //doc.parse<0>(myFile.data());
-    //Logger::Info(myFile.data());
     // ---- Get Name of texture from file name
     std::string nTex = xmlPath
         .replace(0, xmlPath.find_last_of('/')+1, "")    //remove everything before name of file
@@ -269,11 +266,6 @@ bool ParseAnimationMetadata (TextureData& dTex, rapidxml::xml_node<>* node)
             // Then we are lowkey good
             
             AnimationData dAnimation{};
-            Logger::Info(std::format(
-                "first_attribute() is not nullptr and is named '{}', with value '{}'", 
-                current->first_attribute()->name(),
-                current->first_attribute()->value()));
-            
             const char* sProps[] {
                 // ---- StaticTile Shared
                 "X",                    // StartX

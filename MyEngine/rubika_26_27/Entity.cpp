@@ -23,7 +23,37 @@ bool Entity::operator==(Entity const& other) const
     return m_uuid == other.m_uuid;
 }
 
-std::string Entity::getUUID() { return m_uuid; }
+// ---- Getters
+std::string Entity::GetUUID() { return m_uuid; }
+// ---- Setters
+template <typename C>
+C* Entity::AddComponent<C>()
+{
+    /* was adding a IComponent* before
+    for (const auto& comp : m_components)
+    {
+        if (comp == component)
+        {
+            Logger::Error(std::format(
+                "Entity::AddComponent -- The very IComponent '{}'({}) already exists in Entity {}.", 
+                typeid(*comp).name(),
+                //comp,
+                //friendlyName));
+                "B", "C"));
+            return nullptr;
+        }
+    }*/
+    C* component = new C(*this);
+    m_components.push_back(component);
+    return component;
+}
+RenderComponent* Entity::AddComponent<RenderComponent>()
+{
+    RenderComponent* component{new RenderComponent(*this)};
+    m_components.push_back(component);
+    return component;
+}
+
 void Entity::Start() {}
 void Entity::Update(float fDeltaTime)
 {

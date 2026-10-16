@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "IComponent.h"
+#include "RenderComponent.h"
 #include "TransformComponent.h"
 
 namespace sf
@@ -12,10 +13,6 @@ namespace sf
 
 class Entity
 {
-	std::string m_uuid;
-	std::vector<IComponent*> m_components;
-	
-	
 public:
 	std::string friendlyName;
 	TransformComponent transform;
@@ -28,7 +25,12 @@ public:
 	bool operator==(Entity const& other) const;
 	virtual ~Entity();
 	
-	std::string getUUID();
+	// ---- Getters
+	std::string GetUUID();
+	// ---- Setters
+	template <typename C>
+	C* AddComponent<C>();
+	RenderComponent* AddComponent<RenderComponent>();
 	
 	virtual void Start();
 	virtual void Update(float fDeltaTime);
@@ -39,4 +41,7 @@ public:
 	 * Function that will be called each frame to draw the entity
 	*/
 	void Draw(sf::RenderWindow& window) const;
+private:
+	std::string m_uuid;
+	std::vector<IComponent*> m_components;
 };

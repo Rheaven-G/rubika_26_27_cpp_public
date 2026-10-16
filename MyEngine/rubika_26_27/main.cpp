@@ -7,12 +7,14 @@
 #include <Logger.h>
 #include <DebugMgr.h>
 
+#include "RenderComponent.h"
 #include "SceneMgr.h"
 
 int main()
 {
     gData.Init();
 
+    /* TextureImport tests*/
     gData.TextureMgr->LoadTexture(
         "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/Antonio_Belpaese.png");
     gData.TextureMgr->LoadTexture(
@@ -20,50 +22,21 @@ int main()
     gData.TextureMgr->LoadTexture(
         "C:/Users/v.labrousse/Documents/GIT/rubika_26_27_cpp_public/MyEngine/Ressources/unexistent.png");
     auto& texIsaac = gData.TextureMgr->GetTextureData("IsaacSprite");
-    
     auto& texUnexistent = gData.TextureMgr->GetTextureData("blabla");
+    /**/
     
     sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "MyEngine", sf::State::Windowed);
 
     ImGui::SFML::Init(window);
     
-    /* Test logs
-    Logger::Info("This is an info message. That is useful");
-    Logger::Warning("This is a warning message. Should I worry?");
-    Logger::Error("This is an error message. Oh sh*t!!");
-    */
-
     sf::Clock clock;
     clock.restart();
     
-    /**
-     * Scene init + entities
-     */
-    /* Previous testing, Threshold 1
-    SceneMgr sceneMgr;
-    sceneMgr.Init();
-    Scene* s1 = new Scene("DefaultScene1");
-    Scene* s2 = new Scene("DefaultScene2");
-    sceneMgr.AddUnique(s1);
-    sceneMgr.AddUnique(s2);
-    sceneMgr.SetActive(s1);
-    sceneMgr.SetActive("DefaultScene"); // Error testing
-    sceneMgr.SetActive("IncredibleScene"); // Error testing
-    Entity* e1 = new Entity("myEntity 1", sf::Vector2f(0.0f, 0.0f));
-    Entity* e2 = new Entity("myEntity 2", sf::Vector2f(0.0f, 0.0f));
-    Entity* e3 = new Entity("anotherOne", sf::Vector2f(0.0f, 0.0f));
-    e2->children.push_back(e3);
-    Entity* e4 = new Entity("anotherOne", sf::Vector2f(0.0f, 0.0f));
-    e2->children.push_back(e4);
-    Entity* e5 = new Entity("I lied", sf::Vector2f(0.0f, 0.0f));
-    e3->children.push_back(e5);
-    sceneMgr.GetActive()->AddUnique(e1);
-    sceneMgr.GetActive()->AddUnique(e2);
-    sceneMgr.GetActive()->Remove(e1);
-    sceneMgr.GetActive()->AddUnique(e1);
-    */
     Scene* defaultScene = new Scene("Default Scene");
-    defaultScene->AddUnique(new Entity("The Lash tm", sf::Vector2f(0.0f, 0.0f)));
+    Entity* eTheLash = new Entity("The Lash tm",
+        sf::Vector2f(window.getSize().x/2, window.getSize().y/2));
+    RenderComponent* renderComp1{eTheLash};
+    defaultScene->AddUnique(eTheLash);
     gData.SceneMgr->AddUnique(defaultScene);
     
     
