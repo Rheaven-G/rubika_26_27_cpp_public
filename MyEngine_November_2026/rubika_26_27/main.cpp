@@ -13,6 +13,9 @@
 #include <RenderComponent.h>
 #include <SpriteDrawable.h>
 
+#include "InputSystem.h"
+#include "PlayerComponent.h"
+
 int main()
 {
     gData.Init();
@@ -20,8 +23,25 @@ int main()
     sf::RenderWindow window(sf::VideoMode({ 1080, 720 }), "SFML works!", sf::State::Windowed);
 
     ImGui::SFML::Init(window);
+    
+    // ---- InputSystem
+    InputSystem* is = gData.InputSystem;
+    // Creation of input actions
+    auto up = is->AddAction("MoveUP");
+    auto down = is->AddAction("MoveDOWN");
+    auto left = is->AddAction("MoveLEFT");
+    auto right = is->AddAction("MoveRIGHT");
+    // Binding of input actions with keyboard keys
+    is->BindActionTo("MoveUP", {sf::Keyboard::Key::Up, -1});
+    is->BindActionTo("MoveUP", {sf::Keyboard::Key::W, -1});
+    is->BindActionTo("MoveDOWN", {sf::Keyboard::Key::Down, 1});
+    is->BindActionTo("MoveDOWN", {sf::Keyboard::Key::R, 1});
+    is->BindActionTo("MoveLEFT", {sf::Keyboard::Key::Left, -1});
+    is->BindActionTo("MoveLEFT", {sf::Keyboard::Key::A, -1});
+    is->BindActionTo("MoveRIGHT", {sf::Keyboard::Key::Right, 1});
+    is->BindActionTo("MoveRIGHT", {sf::Keyboard::Key::S, 1});
 
-    const char* texturePath = "../../../MyEngine/Ressources/IsaacSprite.png";
+    const char* texturePath = "../../MyEngine/Ressources/IsaacSprite.png";
     gData.TextureMgr->LoadTexture(texturePath);
 
     Scene* scene = gData.SceneMgr->CreateScene("Main");
@@ -44,6 +64,8 @@ int main()
             headSprite->SetTexture(texturePath);
             headSprite->SetAnimation("Head_Down");
         }
+        
+        PlayerComponent* pc = entity->AddComponent<PlayerComponent>();
     }
     gData.SceneMgr->SetActiveScene("Main");
     gData.SceneMgr->Start();

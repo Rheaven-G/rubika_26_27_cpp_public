@@ -212,8 +212,11 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="IDrawable.cpp" />
+    <ClCompile Include="InputAction.cpp" />
+    <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="RectangleDrawable.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -246,7 +249,10 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="IComponent.h" />
     <ClInclude Include="IDrawable.h" />
+    <ClInclude Include="InputAction.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="RectangleDrawable.h" />
     <ClInclude Include="RenderComponent.h" />

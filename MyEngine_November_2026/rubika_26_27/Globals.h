@@ -3,6 +3,7 @@
 class DebugMgr;
 class SceneMgr;
 class TextureMgr;
+class InputSystem;
 class Logger;
 
 class Globals
@@ -24,6 +25,7 @@ public:
 	Logger* Logger;
 	SceneMgr* SceneMgr;
 	TextureMgr* TextureMgr;
+	InputSystem* InputSystem;
 };
 
 extern Globals gData;
