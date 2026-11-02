@@ -27,7 +27,11 @@ const TextureData& TextureMgr::GetTextureData(const std::string& name) const
             "TextureMgr::GetTextureData -> No texture with name '{}' found. Does it exists ? Returning blank TextureData.", name));
     return TextureData();
 }
-
+sf::Texture emptyTexture;
+const sf::Texture& TextureMgr::GetEmptyTexture()
+{
+    return emptyTexture;
+}
 // ---- TextureMgr
 TextureMgr::TextureMgr() {}
 TextureMgr::~TextureMgr()

@@ -73,7 +73,7 @@ public:
 	  * [] Returns the default TextureData in case of an unknown name
 	  */
 	const TextureData& GetTextureData(const std::string& name) const;
-	
+	static const sf::Texture& GetEmptyTexture();
 	// ---- IDebugable
 	void DrawDebug();
 };
