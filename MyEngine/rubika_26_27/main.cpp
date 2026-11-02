@@ -35,7 +35,8 @@ int main()
     Scene* defaultScene = new Scene("Default Scene");
     Entity* eTheLash = new Entity("The Lash tm",
         sf::Vector2f(window.getSize().x/2, window.getSize().y/2));
-    RenderComponent* renderComp1{eTheLash};
+    RenderComponent* renderComp1 = new RenderComponent(*eTheLash);
+    eTheLash->AddComponent(renderComp1);
     defaultScene->AddUnique(eTheLash);
     gData.SceneMgr->AddUnique(defaultScene);
     

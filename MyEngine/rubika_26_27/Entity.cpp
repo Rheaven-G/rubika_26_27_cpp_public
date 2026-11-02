@@ -26,30 +26,31 @@ bool Entity::operator==(Entity const& other) const
 // ---- Getters
 std::string Entity::GetUUID() { return m_uuid; }
 // ---- Setters
-template <typename C>
-C* Entity::AddComponent<C>()
+// TODO: not really a todo but I would like it to work...
+// template <typename C>
+// C* Entity::AddComponent()
+// {
+//     /* was adding a IComponent* before
+//     for (const auto& comp : m_components)
+//     {
+//         if (comp == component)
+//         {
+//             Logger::Error(std::format(
+//                 "Entity::AddComponent -- The very IComponent '{}'({}) already exists in Entity {}.", 
+//                 typeid(*comp).name(),
+//                 //comp,
+//                 //friendlyName));
+//                 "B", "C"));
+//             return nullptr;
+//         }
+//     }*/
+//     C* component = new C(*this);
+//     m_components.push_back(component);
+//     return component;
+// }
+// template<>
+IComponent* Entity::AddComponent(IComponent* component)
 {
-    /* was adding a IComponent* before
-    for (const auto& comp : m_components)
-    {
-        if (comp == component)
-        {
-            Logger::Error(std::format(
-                "Entity::AddComponent -- The very IComponent '{}'({}) already exists in Entity {}.", 
-                typeid(*comp).name(),
-                //comp,
-                //friendlyName));
-                "B", "C"));
-            return nullptr;
-        }
-    }*/
-    C* component = new C(*this);
-    m_components.push_back(component);
-    return component;
-}
-RenderComponent* Entity::AddComponent<RenderComponent>()
-{
-    RenderComponent* component{new RenderComponent(*this)};
     m_components.push_back(component);
     return component;
 }
@@ -64,9 +65,15 @@ void Entity::Update(float fDeltaTime)
 }
 void Entity::Destroy()
 {
-    for (size_t i = m_components.size(); i > 0; --i)
+    // for (size_t i = m_components.size(); i > 0; --i)
+    // {
+    //     delete m_components[i -1];
+    //     m_components[i -1] = nullptr;
+    // }
+    for (auto component : m_components)
     {
-        delete m_components[i -1];
+        delete component;
+        component = nullptr;
     }
     m_components.clear();
 }

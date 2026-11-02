@@ -28,9 +28,11 @@ public:
 	// ---- Getters
 	std::string GetUUID();
 	// ---- Setters
-	template <typename C>
-	C* AddComponent<C>();
-	RenderComponent* AddComponent<RenderComponent>();
+	// TODO: not really a todo but I would like it to work...
+	// template <typename C>
+	// C* AddComponent();
+	// template <>
+	IComponent* AddComponent(IComponent* component);
 	
 	virtual void Start();
 	virtual void Update(float fDeltaTime);

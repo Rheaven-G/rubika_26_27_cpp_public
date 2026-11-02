@@ -19,7 +19,7 @@ public:
 	virtual void Destroy() = 0;
 
 protected:
-	Entity& GetEntity() const { return ParentEntity; };
+	Entity& GetEntity() const { return ParentEntity; }
 
 private:
 	Entity& ParentEntity;
