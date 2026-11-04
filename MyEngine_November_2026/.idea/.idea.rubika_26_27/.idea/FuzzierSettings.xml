@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="com.mituuz.fuzzier.FuzzierSettings">
+    <option name="modules">
+      <map>
+        <entry key="rubika_26_27" value="$PROJECT_DIR$" />
+      </map>
+    </option>
+    <option name="project" value="true" />
+    <option name="recentFiles">
+      <list>
+        <FileAccessData>
+          <option name="accessCount" value="1" />
+          <option name="filePath" value="/rubika_26_27/player.h" />
+        </FileAccessData>
+        <FileAccessData>
+          <option name="accessCount" value="1" />
+          <option name="filePath" value="/rubika_26_27/entity.cpp" />
+        </FileAccessData>
+        <FileAccessData>
+          <option name="accessCount" value="2" />
+          <option name="filePath" value="/rubika_26_27/entity.h" />
+        </FileAccessData>
+        <FileAccessData>
+          <option name="accessCount" value="1" />
+          <option name="filePath" value="/player.h" />
+        </FileAccessData>
+      </list>
+    </option>
+    <option name="recentlySearchedFiles" value="rO0ABXNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAEdwQAAAAEc3IASGNvbS5taXR1dXouZnV6emllci5lbnRpdGllcy5GdXp6eU1hdGNoQ29udGFpbmVyJFNlcmlhbGl6ZWRNYXRjaENvbnRhaW5lctkvLD+bp8u+AgAETAAIZmlsZVBhdGh0ABJMamF2YS9sYW5nL1N0cmluZztMAAhmaWxlbmFtZXEAfgADTAAObW9kdWxlQmFzZVBhdGhxAH4AA0wABXNjb3JldAA8TGNvbS9taXR1dXovZnV6emllci9lbnRpdGllcy9GdXp6eU1hdGNoQ29udGFpbmVyJEZ1enp5U2NvcmU7eHB0AAkvUGxheWVyLmh0AAhQbGF5ZXIuaHQAUUM6L1VzZXJzL3YubGFicm91c3NlL0RvY3VtZW50cy9HSVQvcnViaWthXzI2XzI3X2NwcF9wdWJsaWMvTXlFbmdpbmVfTm92ZW1iZXJfMjAyNnNyADpjb20ubWl0dXV6LmZ1enppZXIuZW50aXRpZXMuRnV6enlNYXRjaENvbnRhaW5lciRGdXp6eVNjb3Jle0NZKkPNxYkCAAdJAA1maWxlbmFtZVNjb3JlSQAOZnJlcXVlbmN5U2NvcmVJAA9tdWx0aU1hdGNoU2NvcmVJABBwYXJ0aWFsUGF0aFNjb3JlSQAMcmVjZW5jeVNjb3JlSQALc3RyZWFrU2NvcmVMABNoaWdobGlnaHRDaGFyYWN0ZXJzdAAPTGphdmEvdXRpbC9TZXQ7eHAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAhzcgARamF2YS51dGlsLkhhc2hTZXS6RIWVlri3NAMAAHhwdwwAAAAQP0AAAAAAAAhzcgARamF2YS5sYW5nLkludGVnZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAAAHNxAH4ADgAAAAFzcQB+AA4AAAACc3EAfgAOAAAAA3NxAH4ADgAAAARzcQB+AA4AAAAFc3EAfgAOAAAABnNxAH4ADgAAAAd4c3EAfgACdAAWL3J1YmlrYV8yNl8yNy9FbnRpdHkuaHQACEVudGl0eS5odABRQzovVXNlcnMvdi5sYWJyb3Vzc2UvRG9jdW1lbnRzL0dJVC9ydWJpa2FfMjZfMjdfY3BwX3B1YmxpYy9NeUVuZ2luZV9Ob3ZlbWJlcl8yMDI2c3EAfgAJAAAACAAAAAAAAAAAAAAAAAAAAAoAAAAIc3EAfgAMdwwAAAAQP0AAAAAAAAhxAH4AEHEAfgARcQB+ABJxAH4AE3EAfgAUcQB+ABVxAH4AFnEAfgAXeHNxAH4AAnQAGC9ydWJpa2FfMjZfMjcvRW50aXR5LmNwcHQACkVudGl0eS5jcHB0AFFDOi9Vc2Vycy92LmxhYnJvdXNzZS9Eb2N1bWVudHMvR0lUL3J1YmlrYV8yNl8yN19jcHBfcHVibGljL015RW5naW5lX05vdmVtYmVyXzIwMjZzcQB+AAkAAAAKAAAAAAAAAAAAAAAAAAAAAAAAAApzcQB+AAx3DAAAABA/QAAAAAAACnEAfgAQcQB+ABFxAH4AEnEAfgATcQB+ABRxAH4AFXEAfgAWcQB+ABdzcQB+AA4AAAAIc3EAfgAOAAAACXhzcQB+AAJ0ABYvcnViaWthXzI2XzI3L1BsYXllci5odAAIUGxheWVyLmh0AFFDOi9Vc2Vycy92LmxhYnJvdXNzZS9Eb2N1bWVudHMvR0lUL3J1YmlrYV8yNl8yN19jcHBfcHVibGljL015RW5naW5lX05vdmVtYmVyXzIwMjZzcQB+AAkAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAhzcQB+AAx3DAAAABA/QAAAAAAACHEAfgAQcQB+ABFxAH4AEnEAfgATcQB+ABRxAH4AFXEAfgAWcQB+ABd4eA==" />
+  </component>
+</project>

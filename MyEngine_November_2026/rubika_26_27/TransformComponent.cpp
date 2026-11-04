@@ -76,4 +76,13 @@ void TransformComponent::UpdateMatrix()
 	Matrix.translate(WorldPosition);
 	Matrix.rotate(sf::degrees(Rotation));
 	Matrix.scale(Scale);
+	
+	if (!OnTransformUpdate.empty())
+	{
+		for (auto& callback : OnTransformUpdate)
+		{
+			// Sure... Why *callback() doesn't work by itself ??
+			(*callback)();
+		}
+	}
 }

@@ -9,12 +9,15 @@
 #include <Profiler.h>
 #include <Logger.h>
 #include <Entity.h>
+#include <Player.h>
 #include <TransformComponent.h>
 #include <RenderComponent.h>
 #include <SpriteDrawable.h>
 
+#include "DynamicColliderComponent.h"
 #include "InputSystem.h"
 #include "PlayerComponent.h"
+
 
 int main()
 {
@@ -46,26 +49,34 @@ int main()
 
     Scene* scene = gData.SceneMgr->CreateScene("Main");
     {
-        Entity* entity = scene->CreateEntity("MainEntity");
-        TransformComponent* tc = entity->AddComponent<TransformComponent>();
-        {
-            tc->SetWorldPosition(sf::Vector2f(100.f, 100.f));
-        }
-
-        RenderComponent* rc = entity->AddComponent<RenderComponent>();
-        {
-            SpriteDrawable* bodySprite = rc->AddNewDrawable<SpriteDrawable>("Body", sf::Vector2f(2, 0), 0, sf::Vector2f(1, 1));
-            bodySprite->SetVisibility(true);
-            bodySprite->SetTexture(texturePath);
-            bodySprite->SetAnimation("Body_Vertical");
-
-            SpriteDrawable* headSprite = rc->AddNewDrawable<SpriteDrawable>("Head", sf::Vector2f(-2.5f, -20), 0, sf::Vector2f(1, 1));
-            headSprite->SetVisibility(true);
-            headSprite->SetTexture(texturePath);
-            headSprite->SetAnimation("Head_Down");
-        }
+        Player* player = new Player("Player");
+        scene->AddEntity(player);
         
-        PlayerComponent* pc = entity->AddComponent<PlayerComponent>();
+        // Entity* entity = scene->CreateEntity("Isaac");
+        //
+        // TransformComponent* tc = entity->AddComponent<TransformComponent>();
+        // {
+        //     tc->SetWorldPosition(sf::Vector2f(100.f, 100.f));
+        // }
+        //
+        // RenderComponent* rc = entity->AddComponent<RenderComponent>();
+        // {
+        //     SpriteDrawable* bodySprite = rc->AddNewDrawable<SpriteDrawable>("Body", sf::Vector2f(2, 0), 0, sf::Vector2f(1, 1));
+        //     bodySprite->SetVisibility(true);
+        //     bodySprite->SetTexture(texturePath);
+        //     bodySprite->SetAnimation("Body_Vertical");
+        //
+        //     SpriteDrawable* headSprite = rc->AddNewDrawable<SpriteDrawable>("Head", sf::Vector2f(-2.5f, -20), 0, sf::Vector2f(1, 1));
+        //     headSprite->SetVisibility(true);
+        //     headSprite->SetTexture(texturePath);
+        //     headSprite->SetAnimation("Head_Down");
+        // }
+        //
+        // PlayerComponent* pc = entity->AddComponent<PlayerComponent>();
+        // {}
+        //
+        // DynamicColliderComponent* dc = entity->AddComponent<DynamicColliderComponent>();
+        // {}
     }
     gData.SceneMgr->SetActiveScene("Main");
     gData.SceneMgr->Start();

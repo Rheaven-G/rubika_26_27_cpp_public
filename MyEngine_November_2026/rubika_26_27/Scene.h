@@ -22,6 +22,7 @@ public:
 	virtual void Destroy();
 
 	Entity* CreateEntity(const std::string& entityName);
+	void AddEntity(Entity* entity);
 	void RemoveEntity(Entity* entity);
 
 	/*

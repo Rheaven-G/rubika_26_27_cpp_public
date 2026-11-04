@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <IComponent.h>
 
 #include <SFML/Graphics/Transform.hpp>
@@ -34,6 +35,9 @@ public:
 	const char* GetName() const override { return "TransformComponent"; }
 	void DrawDebug() override;
 
+	// void SubOnTransformUpdate(std::function<void()> callback);
+	// void UnsubOnTransformUpdate();
+	std::vector<std::function<void()>*> OnTransformUpdate;
 private:
 	sf::Transform Matrix;
 

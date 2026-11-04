@@ -209,6 +209,7 @@
     <ClCompile Include="..\Dependencies\Imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Dependencies\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="DebugMgr.cpp" />
+    <ClCompile Include="DynamicColliderComponent.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="IDrawable.cpp" />
@@ -216,6 +217,7 @@
     <ClCompile Include="InputSystem.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="RectangleDrawable.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
@@ -243,6 +245,7 @@
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_iterators.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_utils.hpp" />
+    <ClInclude Include="..\Player.h" />
     <ClInclude Include="DebugMgr.h" />
     <ClInclude Include="DynamicColliderComponent.h" />
     <ClInclude Include="Entity.h" />
@@ -253,6 +256,7 @@
     <ClInclude Include="InputAction.h" />
     <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Logger.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="Profiler.h" />
     <ClInclude Include="RectangleDrawable.h" />
@@ -263,6 +267,9 @@
     <ClInclude Include="SpriteDrawable.h" />
     <ClInclude Include="TextureMgr.h" />
     <ClInclude Include="TransformComponent.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Components\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
