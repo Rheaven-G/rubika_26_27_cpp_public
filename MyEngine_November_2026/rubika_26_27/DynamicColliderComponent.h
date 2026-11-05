@@ -13,6 +13,7 @@
 
 class TransformComponent;
 
+
 enum class OnCollisionChoice
 {
 	Ignore,
@@ -22,6 +23,12 @@ enum class OnCollisionChoice
 class DynamicColliderComponent : public IComponent
 {
 public:
+	enum FLAGS
+	{
+		NONE = 0,
+		ENABLED = 1 << 0,
+		TRIGGER = 1 << 1,
+	};
 	DynamicColliderComponent(Entity& entity);
 	~DynamicColliderComponent() override;
 
@@ -38,8 +45,10 @@ public:
 	const sf::FloatRect& GetHitbox() const;
 
 	void SetOnCollisionCallback(std::function<OnCollisionChoice(const Entity*)> callback);
+	void OnCollision(const DynamicColliderComponent* collider);
+	void OnTrigger(const DynamicColliderComponent* collider);
 	
-	void UpdateTransform();
+	void UpdateTransform(sf::Vector2f direction = {0.f, 0.f});
 	void OnTransformUpdate();
 	void RecalculateHitbox();
 	
@@ -49,12 +58,14 @@ public:
 	// Debug
 	void Draw(sf::RenderWindow& windows);
 	
+	char Flags = FLAGS::ENABLED;
+	
 private:
 	TransformComponent* Transform;
 	sf::Vector2f ColliderSize{16.f, 24.f};
 	sf::Vector2f ColliderOffset{4.f, -16.f};
 	sf::FloatRect Hitbox;
-	bool bCollisionEnabled = true;
+	
 	
 	std::function<void()>* ptrOnTransformUpdateCallback = 
 		new std::function<void()>{[this](){this->OnTransformUpdate();}};

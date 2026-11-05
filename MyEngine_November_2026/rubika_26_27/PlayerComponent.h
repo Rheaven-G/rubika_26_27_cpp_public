@@ -18,7 +18,7 @@ public:
     void DrawDebug() override;
     
 private:
-    float MovementSpeed{ .03f };
+    float MovementSpeed{ .1f };
     
     void OnMoveX(float val);
     void OnMoveY(float val);

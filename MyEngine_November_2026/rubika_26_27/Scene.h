@@ -34,6 +34,9 @@ public:
 
 	const std::string& GetName() const { return Name; }
 	std::size_t GetHash() const { return Hash; }
+	
+	// Collision
+	void FindOverlaps(float fDeltaTime);
 
 protected:
 

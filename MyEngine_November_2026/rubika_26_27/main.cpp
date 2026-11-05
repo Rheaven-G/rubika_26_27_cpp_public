@@ -17,6 +17,7 @@
 #include "DynamicColliderComponent.h"
 #include "InputSystem.h"
 #include "PlayerComponent.h"
+#include "Wall.h"
 
 
 int main()
@@ -44,39 +45,57 @@ int main()
     is->BindActionTo("MoveRIGHT", {sf::Keyboard::Key::Right, 1});
     is->BindActionTo("MoveRIGHT", {sf::Keyboard::Key::S, 1});
 
-    const char* texturePath = "../../MyEngine/Ressources/IsaacSprite.png";
-    gData.TextureMgr->LoadTexture(texturePath);
+    const char* ptIsaac = "../../MyEngine/Ressources/IsaacSprite.png";
+    gData.TextureMgr->LoadTexture(ptIsaac);
+    const char* ptBasement = "../../MyEngine/Ressources/Basement.png";
+    gData.TextureMgr->LoadTexture(ptBasement);
 
     Scene* scene = gData.SceneMgr->CreateScene("Main");
     {
+        #define WALL_TOP_LEFT(posx, posy)       new Wall("Wall_TopLeft", "Corner_Top_Left", sf::Vector2f(posx, posy))
+        #define WALL_TOP_RIGHT(posx, posy)      new Wall("Wall_TopRight", "Corner_Top_Right", sf::Vector2f(posx, posy))
+        #define WALL_BOTTOM_LEFT(posx, posy)    new Wall("Wall_BottomLeft", "Corner_Bottom_Left", sf::Vector2f(posx, posy))
+        #define WALL_BOTTOM_RIGHT(posx, posy)   new Wall("Wall_BottomRight", "Corner_Bottom_Right", sf::Vector2f(posx, posy))
+        #define WALL_TOP(posx, posy)            new Wall("Wall_Top", "Wall_Classic_Up", sf::Vector2f(posx, posy))
+        #define WALL_BOTTOM(posx, posy)         new Wall("Wall_Bottom", "Wall_Classic_Down", sf::Vector2f(posx, posy))
+        #define WALL_LEFT(posx, posy)           new Wall("Wall_Left", "Wall_Classic_Left", sf::Vector2f(posx, posy))
+        #define WALL_RIGHT(posx, posy)          new Wall("Wall_Right", "Wall_Classic_Right", sf::Vector2f(posx, posy))
+        
+        
+        sf::Vector2i dims {3, 3};
+        sf::Vector2i dTile {52, 52};
+        
+        std::vector<Wall*> wCorners;
+        wCorners.push_back(WALL_TOP_LEFT(0, 0));
+        wCorners.push_back(WALL_TOP_RIGHT(dims.x*dTile.x +dTile.x, 0));
+        wCorners.push_back(WALL_BOTTOM_LEFT(0, dims.y*dTile.y +dTile.y));
+        wCorners.push_back(WALL_BOTTOM_RIGHT(dims.x*dTile.x + dTile.x, dims.y*dTile.y + dTile.y));
+        std::vector<Wall*> wTops;
+        std::vector<Wall*> wBottoms;
+        std::vector<Wall*> wLefts;
+        std::vector<Wall*> wRights;
+        for (int x {0}; x < dims.x; ++x)
+            wTops.push_back(WALL_TOP(x*dTile.x +dTile.x, 0));
+        for (int x {0}; x < dims.x; ++x)
+            wBottoms.push_back(WALL_BOTTOM(x*dTile.x +dTile.x, dims.y*dTile.y +dTile.y));
+        for (int y {0}; y < dims.y; ++y)
+            wLefts.push_back(WALL_LEFT(0, y*dTile.y +dTile.y));
+        for (int y {0}; y < dims.y; ++y)
+            wRights.push_back(WALL_RIGHT(dims.x*dTile.x +dTile.x, y*dTile.y +dTile.y));
+        
+        for (Wall*& w : wCorners)
+            scene->AddEntity(w);
+        for (Wall*& w : wTops)
+            scene->AddEntity(w);
+        for (Wall*& w : wBottoms)
+            scene->AddEntity(w);
+        for (Wall*& w : wLefts)
+            scene->AddEntity(w);
+        for (Wall*& w : wRights)
+            scene->AddEntity(w);
+        
         Player* player = new Player("Player");
         scene->AddEntity(player);
-        
-        // Entity* entity = scene->CreateEntity("Isaac");
-        //
-        // TransformComponent* tc = entity->AddComponent<TransformComponent>();
-        // {
-        //     tc->SetWorldPosition(sf::Vector2f(100.f, 100.f));
-        // }
-        //
-        // RenderComponent* rc = entity->AddComponent<RenderComponent>();
-        // {
-        //     SpriteDrawable* bodySprite = rc->AddNewDrawable<SpriteDrawable>("Body", sf::Vector2f(2, 0), 0, sf::Vector2f(1, 1));
-        //     bodySprite->SetVisibility(true);
-        //     bodySprite->SetTexture(texturePath);
-        //     bodySprite->SetAnimation("Body_Vertical");
-        //
-        //     SpriteDrawable* headSprite = rc->AddNewDrawable<SpriteDrawable>("Head", sf::Vector2f(-2.5f, -20), 0, sf::Vector2f(1, 1));
-        //     headSprite->SetVisibility(true);
-        //     headSprite->SetTexture(texturePath);
-        //     headSprite->SetAnimation("Head_Down");
-        // }
-        //
-        // PlayerComponent* pc = entity->AddComponent<PlayerComponent>();
-        // {}
-        //
-        // DynamicColliderComponent* dc = entity->AddComponent<DynamicColliderComponent>();
-        // {}
     }
     gData.SceneMgr->SetActiveScene("Main");
     gData.SceneMgr->Start();

@@ -13,6 +13,15 @@ namespace sf
 class Entity
 {
 public:
+	enum TAG
+	{
+		NONE    = 0,
+		STATIC  = 1 << 0, // is not static, it's dynamic
+		NEUTRAL = 1 << 1,
+		ENEMY   = 1 << 2,
+		PLAYER  = 1 << 3
+	};
+
 	Entity(std::string friendlyName = "");
 	virtual ~Entity();
 
@@ -34,10 +43,38 @@ public:
 	void DrawDebug();
 
 	const std::string& GetName() const { return FriendlyName; }
+	
+	void AddTag(const TAG& tag)
+	{
+		Tags |= tag;
+	}
+	void RemoveTag(const TAG& tag)
+	{
+		Tags &= ~tag;
+	}
+	/**
+	 * Checks if Entity.Tags contains one of tags
+	 * @param tags TAG&
+	 * @return 
+	 */
+	bool HasTag(const TAG& tags) const
+	{
+		return (Tags & tags) != 0;
+	}
+	/**
+	 * Compares if Entity.Tags has exact tags
+	 * @param tags TAG&
+	 * @return 
+	 */
+	short CompareTagsWith(const TAG& tags) const
+	{
+		return (Tags & tags) == tags;
+	}
 
 protected:
 	std::string FriendlyName;
 	std::vector<IComponent*> Components;
+	short Tags = TAG::NONE; // 16 flags
 };
 
 #include <Entity.hxx>

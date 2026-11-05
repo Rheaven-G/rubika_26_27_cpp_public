@@ -64,8 +64,8 @@ void DCC::SetHitboxOffset(sf::Vector2f offset)
     ColliderOffset = offset;
 }
 
-void DCC::EnableCollision(bool bEnable) { bCollisionEnabled = bEnable; }
-bool DCC::AreCollisionsEnabled() const { return bCollisionEnabled; }
+void DCC::EnableCollision(bool bEnable) { Flags = bEnable ? Flags | ENABLED: Flags & ~ENABLED; }
+bool DCC::AreCollisionsEnabled() const { return (Flags & ENABLED) != 0; }
 
 const sf::FloatRect& DCC::GetHitbox() const
 {
@@ -77,8 +77,23 @@ void DCC::SetOnCollisionCallback(std::function<OnCollisionChoice(const Entity*)>
     OnCollisionCallbacks.emplace_back(callback);
 }
 
-void DCC::UpdateTransform()
-{}
+void DCC::OnCollision(const DCC* collider)
+{
+    
+}
+void DCC::OnTrigger(const DCC* collider)
+{
+    
+}
+
+void DCC::UpdateTransform(sf::Vector2f direction)
+{
+    const auto& p = Transform->GetWorldPosition();
+    Transform->SetWorldPosition({
+        p.x + direction.x, 
+        p.y + direction.y
+    });
+}
 void DCC::OnTransformUpdate()
 {
     RecalculateHitbox();

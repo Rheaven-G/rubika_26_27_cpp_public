@@ -32,6 +32,8 @@ void Entity::Update(float fDeltaTime)
 {
 	for (IComponent* c : Components)
 	{
+		if (c->GetName() == "RenderComponent")
+			continue;
 		c->Update(fDeltaTime);
 	}
 }

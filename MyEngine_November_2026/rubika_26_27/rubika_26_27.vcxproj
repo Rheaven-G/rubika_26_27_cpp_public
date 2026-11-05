@@ -226,6 +226,7 @@
     <ClCompile Include="SpriteDrawable.cpp" />
     <ClCompile Include="TextureMgr.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -245,7 +246,6 @@
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_iterators.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_print.hpp" />
     <ClInclude Include="..\Dependencies\include\rapidxml\rapidxml_utils.hpp" />
-    <ClInclude Include="..\Player.h" />
     <ClInclude Include="DebugMgr.h" />
     <ClInclude Include="DynamicColliderComponent.h" />
     <ClInclude Include="Entity.h" />
@@ -267,6 +267,7 @@
     <ClInclude Include="SpriteDrawable.h" />
     <ClInclude Include="TextureMgr.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />

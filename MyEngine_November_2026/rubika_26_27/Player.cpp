@@ -9,6 +9,8 @@
 
 Player::Player(std::string friendlyName) : Entity(friendlyName)
 {
+    Tags = TAG::PLAYER;
+    
     AddComponent<TransformComponent>();
     AddComponent<RenderComponent>();
     AddComponent<PlayerComponent>();
